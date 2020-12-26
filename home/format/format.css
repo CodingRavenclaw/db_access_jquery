@@ -1,0 +1,19 @@
+nav .active {
+  background-color: #e0ad14 !important;
+}
+nav .navbar-brand {
+  color: white;
+}
+nav .nav-link {
+  color: white;
+  font-weight: bold;
+}
+nav .navbar-toggler-icon {
+  background-image: url("../pictures/hamburgerMenuIconWhite.png");
+}
+
+#databaseError {
+  border: 0px solid black;
+}
+
+/*# sourceMappingURL=format.css.map */

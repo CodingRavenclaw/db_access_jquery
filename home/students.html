@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <!--- Bootstrap min --->
+  <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+  <!--- jQuery --->
+  <script src="../node_modules/jquery/dist/jquery.js"> </script>
+  <!--- Popper min --->
+  <script src="../node_modules/@popperjs/core/dist/umd/popper.min.js"> </script>
+  <!--- Bootstrap min js --->
+  <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"> </script>
+  <!--- js-cookie --->
+  <script src="../node_modules/js-cookie/src/js.cookie.js"> </script>
+
+  <!--- Script to fill the table --->
+  <script type="text/javascript" src="jqueries/tblStudents.js"> </script>
+  <!--- Custom CSS --->
+  <link rel="stylesheet" href="format/format.css">
+  <!--- Browser tab icon --->
+  <link rel="icon" href="pictures/hogwarts.png">
+
+  <meta charset="UTF-8">
+  <title>Schülerverwaltung</title>
+</head>
+<body>
+<div id="mainframe">
+  <nav class="navbar navbar-expand-lg bg-warning">
+    <a class="navbar-brand" href="#">
+      <img src="pictures/hogwarts.png" height="50" width="50" alt="Hogwarts ERP"> Hogwarts ERP
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Schüler verwalten </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Professoren verwalten </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Hauspunkte vergeben </a>
+        </li>
+      </ul>
+
+    </div>
+  </nav>
+
+  <div class="container-fluid">
+    <h1 class="text-center py-3"> Schülerverwaltung </h1>
+
+    <!-- Modal -->
+    <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header" id="modalHeader">
+            <h5 class="modal-title" id="modalTitle"> </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" id="modalBody">
+            <p id="modalBodyParagraph"> </p>
+          </div>
+          <div class="modal-footer" id="modalFooter">
+            <a class="btn" id="modalFooterButton"> </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row my-4">
+      <div class="col-4">
+        <form class="form-inline">
+          <div class="form-group">
+            <label for="searchStudent" class="mx-2"> Schüler suchen: </label>
+            <input type="text" id="searchStudent" name="searchStudent" class="form-control mx-2">
+          </div>
+        </form>
+      </div>
+      <div class="col-4">
+
+      </div>
+      <div class="col-4 text-right">
+        <a class="btn btn-success" href="addStudent.html"> Schüler hinzufügen </a>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col text-center">
+        <table class="table table-hover">
+          <thead id="tblHeadStudents">
+          <tr>
+            <th scope="col">SchülerNr</th>
+            <th scope="col">Vorname</th>
+            <th scope="col">Nachname</th>
+            <th scope="col">Geschlecht</th>
+            <th scope="col">Haus</th>
+            <th scope="col">Blutsstatus</th>
+            <th scope="col">Geburtsdatum</th>
+            <th scope="col">Einschulungsdatum</th>
+            <th scope="col">Abgangsdatum</th>
+            <th scope="col">Abschluss</th>
+            <th scope="col" class="text-center">Bearbeiten</th>
+            <th scope="col" class="text-center">Löschen</th>
+          </tr>
+          </thead>
+          <tbody id="tblBodyStudents">
+          <!--- Will be filled by jQuery! -->
+          </tbody>
+        </table>
+        <button class="btn btn-primary" id="btnPrevious" disabled> ← </button>
+        <button class="btn btn-primary" id="btnNext"> → </button>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

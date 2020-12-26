@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!--- Bootstrap min --->
+  <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+  <!--- jQuery --->
+  <script src="../node_modules/jquery/dist/jquery.js"> </script>
+  <!--- Popper min --->
+  <script src="../node_modules/@popperjs/core/dist/umd/popper.min.js"> </script>
+  <!--- Bootstrap min js --->
+  <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"> </script>
+  <!--- js-cookie --->
+  <script src="../node_modules/js-cookie/src/js.cookie.js"> </script>
+  <!--- Script to fill the form --->
+  <script src="jqueries/editForm.js"> </script>
+  <!--- Custom CSS --->
+  <link rel="stylesheet" href="format/format.css">
+
+  <meta charset="UTF-8">
+  <title>Schüler bearbeiten</title>
+</head>
+<body>
+  <div id="mainframe">
+    <nav class="navbar navbar-expand-lg bg-warning">
+      <a class="navbar-brand" href="#">
+        <img src="pictures/hogwarts.png" height="50" width="50" alt="Hogwarts ERP"> Hogwarts ERP
+      </a>
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="btn btn-primary" href="students.html"> Zurück </a>
+        </li>
+      </ul>
+    </nav>
+    <div class="container">
+      <div class="row my-5">
+        <div class="col">
+          <h1> Schülerverwaltung </h1>
+
+          <form action="dbaccess/editStudent.php" method="POST">
+            <input type="hidden" id="studentId" name="studentId">
+            <div class="form-group">
+              <label for="firstName"> Vorname: </label> <br>
+              <input type="text" class="form-control" id="firstName" name="firstName">
+            </div>
+            <div class="form-group">
+              <label for="lastName"> Nachname: </label> <br>
+              <input type="text" class="form-control" id="lastName" name="lastName">
+            </div>
+            <div class="form-group">
+              <label> Geschlecht: </label> <br>
+              <div class="form-check form-check-inline">
+                <input type="radio" class="form-check-input" id="f" name="gender" value="f">
+                <label class="form-check-label" for="f"> w </label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input type="radio" class="form-check-input" id="m" name="gender" value="m">
+                <label class="form-check-label" for="m"> m </label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="house"> Haus: </label>
+              <select class="form-control" id="house" name="house">
+                <option value="R"> Ravenclaw </option>
+                <option value="S"> Slytherin </option>
+                <option value="H"> Hufflepuff </option>
+                <option value="G"> Gryffindor</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label> Blutsstatus: </label> <br>
+              <div class="form-check form-check-inline">
+                <input type="radio" class="form-check-input" id="halfblood" name="bloodStatus" value="HB">
+                <label class="form-check-label" for="halfblood"> Halbblut </label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input type="radio" class="form-check-input" id="muggleborn" name="bloodStatus" value="MB">
+                <label class="form-check-label" for="muggleborn"> Muggelstämmig </label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input type="radio" class="form-check-input" id="pureblood" name="bloodStatus" value="PB">
+                <label class="form-check-label" for="pureblood"> Reinblütig </label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="dateOfBirth"> Geburtstag: </label>
+              <input type="date" class="form-control" id="dateOfBirth" name="dateOfBirth">
+            </div>
+            <div class="form-group">
+              <label for="dateOfEnrollment"> Einschulungsdatum: </label>
+              <input type="date" class="form-control" id="dateOfEnrollment" name="dateOfEnrollment">
+            </div>
+            <div class="form-group">
+              <label for="dateOfLeaving"> Abgangsdatum: </label>
+              <input type="date" class="form-control" id="dateOfLeaving" name="dateOfLeaving">
+            </div>
+            <div class="form-group">
+              <label> Abschluss: </label> <br>
+              <div class="form-check form-check-inline">
+                <input type="radio" class="form-check-input" id="ND" name="diploma" value="ND">
+                <label class="form-check-label" for="ND"> Kein Abschluss </label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input type="radio" class="form-check-input" id="OWL" name="diploma" value="OWL">
+                <label class="form-check-label" for="OWL"> Zauberer allgemeinen Grades </label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input type="radio" class="form-check-input" id="NEWT" name="diploma" value="NEWT">
+                <label class="form-check-label" for="NEWT"> Unheimlich toller Zauberer </label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input type="radio" class="form-check-input" id="NDY" name="diploma" value="NDY">
+                <label class="form-check-label" for="NDY"> Abschluss noch nicht erreicht </label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input type="radio" class="form-check-input" id="SE" name="diploma" value="SE">
+                <label class="form-check-label" for="SE"> Schüleraustausch </label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input type="radio" class="form-check-input" id="E" name="diploma" value="E">
+                <label class="form-check-label" for="E"> Schulverweis </label>
+              </div>
+            </div>
+            <div class="text-right">
+              <button class="btn btn-success" type="submit"> Schüler bearbeiten</button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+
+
+</body>
+</html>
