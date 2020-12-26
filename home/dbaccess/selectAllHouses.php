@@ -4,7 +4,7 @@ require('masterAccessor.php');
 
 try {
     $pdo = new PDO('mysql:host='.$db_host_address.';dbname='.$db_name.'', $db_username, $db_password);
-    $sqlStatement = "SELECT * FROM house";
+    $sqlStatement = "SELECT * FROM hogwarts.house";
     $preparedStatement = $pdo->prepare($sqlStatement);
     if ($preparedStatement->execute()) {
         $results = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);

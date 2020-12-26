@@ -2,7 +2,6 @@ $(document).ready(function() {
 
   let strUrlToSelectAllStudents = "../home/dbaccess/selectAllStudents.php";
   let strUrlToDeleteAStudent = "../home/dbaccess/deleteStudent.php";
-  let strUrlToFindStudent = "../home/dbaccess/findStudent.php";
   let strUrlToGetTotalNumberOfStudents = "../home/dbaccess/getTotalNumberOfStudents.php";
   let intNumberOfStudents = 0;
   let intDataSet = 0;
@@ -12,16 +11,26 @@ $(document).ready(function() {
   let boolBtnHasButtonDeleteAck = false;
   let intTypingTimer = 0;
 
+  let strFirstName = "";
+  let strLastName = "";
+
   function loadStudents() {
+    getTotalNumberOfStudents();
     $.ajax({
       url: strUrlToSelectAllStudents,
       type: 'POST',
       dataType: 'json',
       data: {
-        dataSet: intDataSet
+        dataSet: intDataSet,
+        firstname: strFirstName,
+        lastname: strLastName
       },
       success: function (result) {
         intNumberOfStudents = Object.keys(result).length;
+        if(intTotalNumberOfStudents < intDataSetLimit) {
+          $('#btnNext').prop("disabled", true);
+          $('#btnPrevious').prop("disabled", true);
+        }
         $('#tblBodyStudents').empty();
         for(let intStudentIndexCounter = 0; intStudentIndexCounter < intNumberOfStudents; intStudentIndexCounter++) {
           $('#tblBodyStudents').append(
@@ -41,9 +50,9 @@ $(document).ready(function() {
         }
       },
       error: function (err, textStatus, errorThrown) {
-        console.error("Fehler bei der Verbindung zur Datenbank!" + errorThrown);
+        console.error("Fehler bei der Verbindung zur Datenbank! " + errorThrown);
       }
-    })
+    });
   }
 
   function deleteStudent(aStudentId) {
@@ -100,81 +109,42 @@ $(document).ready(function() {
     });
   });
 
-  let strFirstName = "";
-  let strLastName = "";
-
   $('#searchStudent').on("input", function() {
     clearTimeout(intTypingTimer);
-
     intTypingTimer = setTimeout(function() {
       let strSearchedStudent = "";
+      intDataSet = 0;
       strSearchedStudent = strSearchedStudent + $('#searchStudent').val();
       let arrStudentName = strSearchedStudent.split(" ");
-      if(arrStudentName.length == 0) {
-        loadStudents();
-      } else if(arrStudentName.length == 1) {
+      if(!$('#searchStudent').val()) {
+        strFirstName = "";
+        strLastName = "";
+      } else if(arrStudentName.length === 1) {
         strFirstName = arrStudentName[0];
-      } else if(arrStudentName.length == 2) {
+      } else if(arrStudentName.length === 2) {
         strFirstName = arrStudentName[0];
         strLastName = arrStudentName[1];
       }
-      $.ajax({
-        url: strUrlToFindStudent,
-        type: "POST",
-        dataType: 'json',
-        data: {
-          firstname: strFirstName,
-          lastname: strLastName
-        },
-        success: function(result) {
-          intNumberOfStudents = Object.keys(result).length;
-          if(intNumberOfStudents === 0) {
-            $('#modalHeader').addClass('bg-danger text-white').text('Fehler!');
-            $('#modalBodyParagraph').text('Der Schüler ' + strFirstName + ' ' + strLastName + ' wurde nicht gefunden!');
-            $('#modalFooterButton').attr('data-dismiss', 'modal').addClass('btn-primary').text('Zurück');
-            $('#modal').modal();
-            $('#modalFooterButton').click(function() {
-              setTimeout(function() {
-                strFirstName = "";
-                strLastName = "";
-                $('#searchStudent').select();
-              }, 500)
-            });
-          } else {
-            $('#tblBodyStudents').empty();
-            for(let intStudentIndexCounter = 0; intStudentIndexCounter < intNumberOfStudents; intStudentIndexCounter++) {
-              $('#tblBodyStudents').append(
-                "<tr> <td class='studentNo'>" + result[intStudentIndexCounter].studentId + "</td>" +
-                "<td class='firstName'>" + result[intStudentIndexCounter].firstname + "</td>" +
-                "<td class='lastName'>" + result[intStudentIndexCounter].lastname + "</td>" +
-                "<td class='gender'>" + result[intStudentIndexCounter].gender + "</td>" +
-                "<td class='house'>" + result[intStudentIndexCounter].house + "</td>" +
-                "<td class='bloodStatus'>" + result[intStudentIndexCounter].bloodstatus + "</td>" +
-                "<td class='dateOfBirth'>" + result[intStudentIndexCounter].birthday + "</td>" +
-                "<td class='dateOfEnrollment'>" + result[intStudentIndexCounter].date_of_enrollment + "</td>" +
-                "<td class='dateOfLeaving'>" + result[intStudentIndexCounter].date_of_leaving + "</td>" +
-                "<td class='diploma'>" + result[intStudentIndexCounter].diploma + "</td>" +
-                "<td> <form action='editStudent.html'> <button class='btn btn-warning' id='btnEdit'> Bearbeiten </button> </form> </td>" +
-                "<td> <button class='btn btn-danger' id='btnDelete'> Löschen </button> </td>"
-              );
-            }
-            strFirstName = "";
-            strLastName = "";
-          }
-        },
-        error: function(err) {
-          $('#modalHeader').addClass('bg-danger text-white').text('Fehler!');
-          $('#modalBodyParagraph').text('Fehler beim Finden des Schülers!');
-          $('#modalFooterButton').attr('data-dismiss', 'modal').addClass('btn-danger').text('Zurück');
-          $('#modal').modal();
-        }
-      });
+      loadStudents();
     }, 1500);
   });
 
   function getTotalNumberOfStudents() {
-    $.getJSON(strUrlToGetTotalNumberOfStudents, function(result) {
-      intTotalNumberOfStudents = result[0].total_number_of_students;
+    $.ajax({
+      url: strUrlToGetTotalNumberOfStudents,
+      type: 'POST',
+      dataType: 'json',
+      data: {
+        dataSet: intDataSet,
+        firstname: strFirstName,
+        lastname: strLastName
+      },
+      success: function (result) {
+        intTotalNumberOfStudents = result[0].total_number_of_students;
+      },
+      error: function (err, textStatus, errorThrown) {
+        console.error("Fehler bei der Verbindung zur Datenbank!");
+      }
     });
   }
 
@@ -182,6 +152,7 @@ $(document).ready(function() {
     intDataSet = intDataSet + intDataSetLimit;
     if(intDataSet >= Math.trunc(intTotalNumberOfStudents / intDataSetLimit) * intDataSetLimit) {
       $('#btnNext').prop("disabled", true);
+      $('#btnPrevious').prop("disabled", false);
       loadStudents();
     } else {
       $('#btnPrevious').prop("disabled", false);
@@ -193,6 +164,7 @@ $(document).ready(function() {
     intDataSet = intDataSet - intDataSetLimit;
     if(intDataSet <= 0) {
       $('#btnPrevious').prop("disabled", true);
+      $('#btnNext').prop("disabled", false);
       loadStudents();
     } else {
       $('#btnNext').prop("disabled", false);
@@ -201,7 +173,6 @@ $(document).ready(function() {
   });
 
   function init() {
-    getTotalNumberOfStudents();
     loadStudents();
   }
 

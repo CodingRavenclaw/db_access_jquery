@@ -19,16 +19,16 @@ if($dateOfLeaving == '' || $dateOfLeaving == '0001-01-01') {
 
 try {
     $pdo = new PDO('mysql:host='.$db_host_address.';dbname='.$db_name.'', $db_username, $db_password);
-    $sqlStatement = "UPDATE student SET 
-        firstName = :firstName,
-        lastName = :lastName,
-        gender = :gender,
-        house = :house,
-        bloodstatus = :bloodStatus,
-        birthday = :dateOfBirth,
-        date_of_enrollment = :dateOfEnrollment,
-        date_of_leaving = :dateOfLeaving,
-        diploma = :diploma WHERE studentId = :studentId";
+    $sqlStatement = "UPDATE hogwarts.student SET 
+        student.firstName = :firstName,
+        student.lastName = :lastName,
+        student.gender = :gender,
+        student.house = :house,
+        student.bloodstatus = :bloodStatus,
+        student.birthday = :dateOfBirth,
+        student.date_of_enrollment = :dateOfEnrollment,
+        student.date_of_leaving = :dateOfLeaving,
+        student.diploma = :diploma WHERE student.studentId = :studentId";
     $preparedStatement = $pdo->prepare($sqlStatement);
     $preparedStatement->bindParam(':firstName', $firstName);
     $preparedStatement->bindParam(':lastName', $lastName);
