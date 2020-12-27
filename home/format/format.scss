@@ -19,6 +19,12 @@ nav {
 
 }
 
+#tblStudents {
+  th {
+    cursor: pointer;
+  }
+}
+
 #databaseError {
   border: 0px solid black;
 }

@@ -89,25 +89,25 @@
 
     <div class="row">
       <div class="col text-center">
-        <table class="table table-hover">
+        <table class="table table-hover" id="tblStudents">
           <thead id="tblHeadStudents">
           <tr>
-            <th scope="col">SchülerNr</th>
-            <th scope="col">Vorname</th>
-            <th scope="col">Nachname</th>
-            <th scope="col">Geschlecht</th>
-            <th scope="col">Haus</th>
-            <th scope="col">Blutsstatus</th>
-            <th scope="col">Geburtsdatum</th>
-            <th scope="col">Einschulungsdatum</th>
-            <th scope="col">Abgangsdatum</th>
-            <th scope="col">Abschluss</th>
+            <th scope="col" id="thStudentId">SchülerNr</th>
+            <th scope="col" id="thFirstname">Vorname</th>
+            <th scope="col" id="thLastname">Nachname</th>
+            <th scope="col" id="thGender">Geschlecht</th>
+            <th scope="col" id="thHouse">Haus</th>
+            <th scope="col" id="thBloodstatus">Blutsstatus</th>
+            <th scope="col" id="thBirthday">Geburtsdatum</th>
+            <th scope="col" id="thDateOfEnrollment">Einschulungsdatum</th>
+            <th scope="col" id="thDateOfLeaving">Abgangsdatum</th>
+            <th scope="col" id="thDiploma">Abschluss</th>
             <th scope="col" class="text-center">Bearbeiten</th>
             <th scope="col" class="text-center">Löschen</th>
           </tr>
           </thead>
           <tbody id="tblBodyStudents">
-          <!--- Will be filled by jQuery! -->
+            <!--- * Will be filled by jQuery! * -->
           </tbody>
         </table>
         <button class="btn btn-primary" id="btnPrevious" disabled> ← </button>

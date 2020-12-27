@@ -12,6 +12,10 @@ nav .navbar-toggler-icon {
   background-image: url("../pictures/hamburgerMenuIconWhite.png");
 }
 
+#tblStudents th {
+  cursor: pointer;
+}
+
 #databaseError {
   border: 0px solid black;
 }

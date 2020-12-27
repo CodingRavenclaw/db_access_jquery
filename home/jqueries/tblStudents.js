@@ -11,47 +11,82 @@ $(document).ready(function() {
   let boolBtnHasButtonDeleteAck = false;
   let intTypingTimer = 0;
 
+  let strOrderBy = "student.studentId";
+
   let strFirstName = "";
   let strLastName = "";
 
-  function loadStudents() {
-    getTotalNumberOfStudents();
+  function getTotalNumberOfStudents() {
     $.ajax({
-      url: strUrlToSelectAllStudents,
+      url: strUrlToGetTotalNumberOfStudents,
       type: 'POST',
       dataType: 'json',
       data: {
-        dataSet: intDataSet,
         firstname: strFirstName,
         lastname: strLastName
       },
       success: function (result) {
-        intNumberOfStudents = Object.keys(result).length;
-        if(intTotalNumberOfStudents < intDataSetLimit) {
-          $('#btnNext').prop("disabled", true);
-          $('#btnPrevious').prop("disabled", true);
-        }
-        $('#tblBodyStudents').empty();
-        for(let intStudentIndexCounter = 0; intStudentIndexCounter < intNumberOfStudents; intStudentIndexCounter++) {
-          $('#tblBodyStudents').append(
-            "<tr> <td class='studentNo'>" + result[intStudentIndexCounter].studentId + "</td>" +
-            "<td class='firstName'>" + result[intStudentIndexCounter].firstname + "</td>" +
-            "<td class='lastName'>" + result[intStudentIndexCounter].lastname + "</td>" +
-            "<td class='gender'>" + result[intStudentIndexCounter].gender + "</td>" +
-            "<td class='house'>" + result[intStudentIndexCounter].house + "</td>" +
-            "<td class='bloodStatus'>" + result[intStudentIndexCounter].bloodstatus + "</td>" +
-            "<td class='dateOfBirth'>" + result[intStudentIndexCounter].birthday + "</td>" +
-            "<td class='dateOfEnrollment'>" + result[intStudentIndexCounter].date_of_enrollment + "</td>" +
-            "<td class='dateOfLeaving'>" + result[intStudentIndexCounter].date_of_leaving + "</td>" +
-            "<td class='diploma'>" + result[intStudentIndexCounter].diploma + "</td>" +
-            "<td class='text-center'> <form action='editStudent.html'> <button class='btn btn-warning' id='btnEdit'> Bearbeiten </button> </form> </td>" +
-            "<td class='text-center'> <button class='btn btn-danger' id='btnDelete'> Löschen </button> </td>"
-          );
-        }
+        intTotalNumberOfStudents = result[0].total_number_of_students;
       },
       error: function (err, textStatus, errorThrown) {
-        console.error("Fehler bei der Verbindung zur Datenbank! " + errorThrown);
-      }
+        console.error("Fehler bei der Verbindung zur Datenbank!");
+      },
+    });
+  }
+
+  function checkPagination() {
+    if((intNumberOfStudents < intDataSetLimit) && (intNumberOfStudents == intTotalNumberOfStudents)) {
+      $('#btnPrevious').prop("disabled", true);
+      $('#btnNext').prop("disabled", true);
+    } else if(intDataSet >= Math.trunc(intTotalNumberOfStudents / intDataSetLimit) * intDataSetLimit) {
+      //  Pagination logic for btnNext
+      $('#btnNext').prop("disabled", true);
+      $('#btnPrevious').prop("disabled", false);
+    } else if(intDataSet <= 0) {
+      //  Pagination logic for btnPrevious
+      $('#btnPrevious').prop("disabled", true);
+      $('#btnNext').prop("disabled", false);
+    }
+  }
+
+  function loadStudents() {
+    $.when(getTotalNumberOfStudents()).then(function() {
+      $.ajax({
+        url: strUrlToSelectAllStudents,
+        type: 'POST',
+        dataType: 'json',
+        data: {
+          dataSet: intDataSet,
+          firstname: strFirstName,
+          lastname: strLastName,
+          orderBy: strOrderBy
+        },
+        success: function (result) {
+          intNumberOfStudents = Object.keys(result).length;
+          checkPagination();
+          $('#tblBodyStudents').empty();
+          for(let intStudentIndexCounter = 0; intStudentIndexCounter < intNumberOfStudents; intStudentIndexCounter++) {
+            $('#tblBodyStudents').append(
+              "<tr> <td class='studentNo'>" + result[intStudentIndexCounter].studentId + "</td>" +
+              "<td class='firstName'>" + result[intStudentIndexCounter].firstname + "</td>" +
+              "<td class='lastName'>" + result[intStudentIndexCounter].lastname + "</td>" +
+              "<td class='gender'>" + result[intStudentIndexCounter].gender + "</td>" +
+              "<td class='house'>" + result[intStudentIndexCounter].house + "</td>" +
+              "<td class='bloodStatus'>" + result[intStudentIndexCounter].bloodstatus + "</td>" +
+              "<td class='dateOfBirth'>" + result[intStudentIndexCounter].birthday + "</td>" +
+              "<td class='dateOfEnrollment'>" + result[intStudentIndexCounter].date_of_enrollment + "</td>" +
+              "<td class='dateOfLeaving'>" + result[intStudentIndexCounter].date_of_leaving + "</td>" +
+              "<td class='diploma'>" + result[intStudentIndexCounter].diploma + "</td>" +
+              "<td class='text-center'> <form action='editStudent.html'> <button class='btn btn-warning' id='btnEdit'> Bearbeiten </button> </form> </td>" +
+              "<td class='text-center'> <button class='btn btn-danger' id='btnDelete'> Löschen </button> </td>"
+            );
+          }
+
+        },
+        error: function (err, textStatus, errorThrown) {
+          console.error("Fehler bei der Verbindung zur Datenbank! " + errorThrown);
+        }
+      });
     });
   }
 
@@ -71,6 +106,56 @@ $(document).ready(function() {
       }
     });
   }
+
+  $('#thStudentId').click(function() {
+    strOrderBy = "student.studentId";
+    loadStudents();
+  });
+
+  $('#thFirstname').click(function() {
+    strOrderBy = "student.firstname";
+    loadStudents();
+  });
+
+  $('#thLastname').click(function() {
+    strOrderBy = "student.lastname";
+    loadStudents();
+  });
+
+  $('#thGender').click(function() {
+    strOrderBy = "student.gender";
+    loadStudents();
+  });
+
+  $('#thHouse').click(function() {
+    strOrderBy = "student.house";
+    loadStudents();
+  });
+
+  $('#thBloodstatus').click(function() {
+    strOrderBy = "student.bloodstatus";
+    loadStudents();
+  });
+
+  $('#thBirthday').click(function() {
+    strOrderBy = "student.birthday";
+    loadStudents();
+  });
+
+  $('#thDateOfEnrollment').click(function() {
+    strOrderBy = "student.date_of_enrollment";
+    loadStudents();
+  });
+
+  $('#thDateOfLeaving').click(function() {
+    strOrderBy = "student.date_of_leaving";
+    loadStudents();
+  });
+
+  $('#thDiploma').click(function() {
+    strOrderBy = "student.diploma";
+    loadStudents();
+  });
 
   $('#tblBodyStudents').on("click", "#btnEdit", function () {
     let intStudentId = $(this).closest('tr').find('.studentNo').text();
@@ -119,6 +204,7 @@ $(document).ready(function() {
       if(!$('#searchStudent').val()) {
         strFirstName = "";
         strLastName = "";
+        intDataSet = 0;
       } else if(arrStudentName.length === 1) {
         strFirstName = arrStudentName[0];
       } else if(arrStudentName.length === 2) {
@@ -129,47 +215,14 @@ $(document).ready(function() {
     }, 1500);
   });
 
-  function getTotalNumberOfStudents() {
-    $.ajax({
-      url: strUrlToGetTotalNumberOfStudents,
-      type: 'POST',
-      dataType: 'json',
-      data: {
-        dataSet: intDataSet,
-        firstname: strFirstName,
-        lastname: strLastName
-      },
-      success: function (result) {
-        intTotalNumberOfStudents = result[0].total_number_of_students;
-      },
-      error: function (err, textStatus, errorThrown) {
-        console.error("Fehler bei der Verbindung zur Datenbank!");
-      }
-    });
-  }
-
   $('#btnNext').click(function() {
     intDataSet = intDataSet + intDataSetLimit;
-    if(intDataSet >= Math.trunc(intTotalNumberOfStudents / intDataSetLimit) * intDataSetLimit) {
-      $('#btnNext').prop("disabled", true);
-      $('#btnPrevious').prop("disabled", false);
-      loadStudents();
-    } else {
-      $('#btnPrevious').prop("disabled", false);
-      loadStudents();
-    }
+    loadStudents();
   });
 
   $('#btnPrevious').click(function() {
     intDataSet = intDataSet - intDataSetLimit;
-    if(intDataSet <= 0) {
-      $('#btnPrevious').prop("disabled", true);
-      $('#btnNext').prop("disabled", false);
-      loadStudents();
-    } else {
-      $('#btnNext').prop("disabled", false);
-      loadStudents();
-    }
+    loadStudents();
   });
 
   function init() {
